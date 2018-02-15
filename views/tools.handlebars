@@ -1,0 +1,26 @@
+<h1>Tools you'll need</h1>
+
+<h2>A BreweryDB account</h2>
+<p>BreweryDB offers free accounts to anyone who wants access to the database. (Premium Access is available for those who want more flexibility in their requests or want to make a higher volume of requests.) To create an account, go to the <a href="http://www.brewerydb.com/developers">BreweryDB developers page</a> and sign up, and then head to the <a href="http://www.brewerydb.com/developers/apps">My Apps tab</a> to register an application and receive an API key.</p>
+
+
+<h2>Your own API key</h2>
+<p>The API key acts as your personal identifier, allowing BreweryDB to keep track of who is using the service and how often, as well as make sure they are cleared to get in. This is a secret that needs to be guarded for several reasons – first and foremost because it is required by the <a href="http://www.brewerydb.com/developers/docs-terms">Terms of Service</a>, and also because you don’t want someone else using your requests for something malicious or simply using up the limited number you are allowed.</p>
+
+
+<h2>Branding</h2>
+<p>And while it is not strictly implementation- or code-related, we recommend reading the whole Terms of Service document to understand what’s expected of API users. Requirements include the prominent branding of your application with the following statement: <em>This product uses the BreweryDB API but is not endorsed or certified by PintLabs.</em> BreweryDB also asks that you use a banner it supplies to call out the connection. (It can be found <a href="http://s3.amazonaws.com/brewerydb/Powered-By-BreweryDB.png">here</a>.)</p>
+
+
+<img src=http://s3.amazonaws.com/brewerydb/Powered-By-BreweryDB.png width="900px">
+
+
+<h2>Some know-how</h2>
+<p>You will need to have a working knowledge of JavaScript and AJAX, and be able to handle a return type of JSON, XML, or serialized PHP. We will focus on JSON, as it is the default return type.</p>
+
+
+<h2>A server</h2>
+<p>You’ll also need somewhere to host your app. For the purposes of this guide, we will use a server running Node.js and Express with Handlebars. It is possible to accomplish this task with other services.</p>
+
+
+<p>Next we will jump into some real code and <a href="/server">set up the server</a>.</p>

@@ -1,0 +1,62 @@
+<h1>Making the request</h1>
+
+<p>It's time to assemble a request and send it off to BreweryDB! We will continue with our example of using the Location endpoint to request a list of breweries in Ann Arbor. Here we'll focus on making the request, and the next step will be processing the results and displaying a finished product.</p>
+
+<p>Here is the request with the processing removed:</p>
+
+<pre>app.get('/result',function(req,res,next){
+  var context = {};
+  request('http://api.brewerydb.com/v2/locations?locality=ann%20arbor&key=' 
+    + credentials.bdbKey, function(err, response, body){
+    if(!err && response.statusCode < 400){
+        //processing goes here;
+    } else {
+      console.log(err);
+      if(response){
+        console.log(response.statusCode);
+      }
+      next(err);
+    }
+  });
+});</pre>
+
+<p>Let's break this down and see what it's doing.</p>
+
+<pre>app.get('/result',function(req,res,next){
+});</pre>
+
+<p>The outer wrapper is saying that when the page /result is requested, we'll do the folliwing in a callback function with three parameters.</p>
+
+<hr>
+
+<pre>var context = {};</pre>
+
+<p>Here we set up a variable to hold the information we want to send to our handlebars template later.</p>
+
+<hr>
+
+<pre>request('http://api.brewerydb.com/v2/locations?locality=ann%20arbor&key=' 
+    + credentials.bdbKey, function(err, response, body){</pre>
+
+<p>Recall that request is a variable allowing us to use request to avoid cross-domain issues. Here we are assembling our GET request using the base URL for the database, our query on locality (the database's name for city) set to Ann Arbor, and our obfuscated API key, which is tucked away already. We then oen another callback function so that we can perform some fun things only after the request has gone through.</p>
+
+<hr>
+
+<pre>if(!err && response.statusCode < 400){</pre>
+
+<p>But we want to make sure that everything went as planned, so we test to make sure our error parameter is not true and that the response status code is less than 400, signaling to us that things are okay. If that is the case, we will move on to process the response.</p>
+
+<hr>
+
+<pre>else {
+      console.log(err);
+      if(response){
+        console.log(response.statusCode);
+      }
+      next(err);</pre>
+
+<p>But if it isn't? We will log the error to the console and if there was a response of some kind, we will log the status code of the response as well. We then pass the error code down the line using the next() function. This will get caught by our four-parameter function at the end of the document and will signal an error 500 that will be logged and displayed to the user.</p>
+
+<hr>
+
+<p>All right, we shoud now have a successful request, so <a href="/result">let's do something with it</a>. That's what you came here for, right?</p>

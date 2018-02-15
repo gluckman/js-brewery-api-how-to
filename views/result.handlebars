@@ -1,0 +1,145 @@
+<h1>The results are in</h1>
+
+<h2>Say hello to JSON</h2>
+
+<p>We have our response, and since we didn't set any parameter to specify the type, it's in JSON, just like we wanted. The BreweryDB documentation provides all of the details on the values you can get back. Let's take a look at a snippet of what we received for our query on Ann Arbor breweries.</p>
+
+<pre>{ currentPage: 1,
+  numberOfPages: 1,
+  totalResults: 10,
+  data: 
+   [ { id: '6WoGvV',
+       name: 'HopCat Ann Arbor',
+       streetAddress: '311 Maynard',
+       locality: 'Ann Arbor',
+       region: 'Michigan',
+       postalCode: '48104',
+       phone: '(734) 436-2875',
+       website: 'http://www.hopcat.com/ann-arbor',
+       hoursOfOperation: 'Mon:  11:00am - 2:00am\nTue:  11:00am - 2:00am\nWed:  11:00am - 2:00am\nThu:  11:00am - 2:00am\nFri:  11:00am - 2:00am\nSat:  10:00am - 2:00am\nSun:  10:00am - 2:00am\n\n',
+       latitude: 42.27893,
+       longitude: -83.741635,
+       isPrimary: 'N',
+       inPlanning: 'N',
+       isClosed: 'Y',
+       openToPublic: 'Y',
+       locationType: 'brewpub',
+       locationTypeDisplay: 'Brewpub',
+       countryIsoCode: 'US',
+       yearOpened: '2015',
+       status: 'verified',
+       statusDisplay: 'Verified',
+       createDate: '2015-02-27 16:40:33',
+       updateDate: '2015-02-27 16:49:50',
+       breweryId: 'HizvxH',
+       brewery: [Object],
+       country: [Object] },
+     { id: 'CGyBh2',
+       name: 'Jolly Pumpkin Cafe & Brewery‎',
+       streetAddress: '311 South Main Street',
+       locality: 'Ann Arbor',
+       region: 'Michigan',
+       postalCode: '48104',
+       phone: '734-913-2730',
+       website: 'http://www.jollypumpkin.com/annarbor/',
+       hoursOfOperation: 'Main Floor\r\nMonday - Thursday 11am - 11pm Friday 11am - midnight \r\nSaturday 10am - midnight \r\nSunday 10am - 11pm\r\n\r\nUpstairs\r\nSunday - Wednesday 4pm - midnight \r\nThursday - Saturday 4pm - 2am\r\n\r\nRooftop Deck\r\nMonday - Wednesday 4pm - 11pm \r\nThursday - Friday 4pm - 1am \r\nSaturday - noon - 1 am\r\nSunday - noon - 11pm',
+       latitude: 42.27927,
+       longitude: -83.748608,
+       isPrimary: 'N',
+       inPlanning: 'N',
+       isClosed: 'N',
+       openToPublic: 'Y',
+       locationType: 'restaurant',
+       locationTypeDisplay: 'Restaurant/Ale House',
+       countryIsoCode: 'US',
+       status: 'verified',
+       statusDisplay: 'Verified',
+       createDate: '2012-08-11 19:41:57',
+       updateDate: '2014-07-23 19:11:34',
+       breweryId: 'pzWq1r',
+       brewery: [Object],
+       country: [Object] },
+</pre>
+
+<p>At the very top you'll note that we get a value for the current page, the number of pages, and the number of results returned. Then there's a 'data' segment wrapping each nested result. here are things like a name (which somewhat confusingly is the name of the specific location, not the brewery) the address, the website, latitude and longitude, and so on. We're most interested with the brewery name, which is another level down in the brewery object toward the end of each entry.</p>
+
+<hr>
+
+<h2>Okay, what now?</h2>
+
+<p>So we have all of this informaiton, but we only want to highlight and use some of it. This is what we do inside that second callback function after we've checked that everything's okay.</p>
+
+<pre>var parsedResponse = JSON.parse(body);</pre>
+
+<p>The first step is to parse the JSON response. We store it temporarily in a variable.</p>
+
+<hr>
+
+<pre>context.bCount = parsedResponse.totalResults;</pre>
+
+<p>Next we pull out the total number of results. It's the first thing we're saving to the context variable we created before the request.</p>
+
+<hr>
+
+<pre>var breweries = parsedResponse.data;</pre>
+
+<p>Now we can pull out the 'data' segment as our group of brewery results.</p>
+
+<hr>
+
+<pre>context.city = breweries[0].locality;</pre>
+
+<p>Just as a sort of check and to make sure the text is formatted properly when we go to display it, we pull the locality (city) from the first brewery in the list and save that to the context variable as well.</p>
+
+<hr>
+
+<pre>var breweryList = [];
+        for (var i in breweries) {
+          breweryList.push({'name': breweries[i].brewery.name, 'website': breweries[i].website})
+        }</pre>
+
+<p>Here we're creating an array and going through the breweries in our results to pull out their (brewery) names and their websites. We will use these as the text and links in a list.</p>
+
+<hr>
+
+<pre>context.breweryList = breweryList;</pre>
+
+<p>Here we save the breweries to the context variable so the Handlebars template has access to them as well.</p>
+
+<hr>
+
+<pre>res.render('result', context);</pre>
+
+<p>And finaly, we ship the results off to the Handlebars template using the render function. Before we see the final product, let's take a peek at how the template handles the information.</p>
+
+<h3>NOTE: You would definitely want to do some error checking with the data before displaying it, for instance to make sure there are results to display. We have omitted that here because this example returns multiple breweries. An easy check would be to use the <code>totalResults</code> as a sort of gatekeeper for any later code.</h3>
+
+<hr>
+
+<h2>How Handlebars handles the info</h2>
+
+<pre><code>&lt;h1&gt;These are the &#123;&#123;bCount&#125;&#125; breweries in &#123;&#123;city&#125;&#125;:&lt;/h1&gt;
+    &lt;ul&gt;
+        &#123;&#123;#each breweryList&#125;&#125;
+            &lt;li&gt;
+                &lt;a href=&#123;&#123;this.website&#125;&#125;&gt;&#123;&#123;this.name&#125;&#125;&lt;/a&gt;
+            &lt;/li&gt;
+        &#123;&#123;/each&#125;&#125;
+    &lt;/ul&gt;</code></pre>
+
+<p>We start off with a heading that uses the number of results and the name of the city. Below, we use the built-in #each helper to display the name and link for each of the brewery results in the same fashion. Now time to check out the actual results.</p>
+
+<h2>And here it is...</h2>
+
+<h1>These are the {{bCount}} breweries in {{city}}:</h1>
+<ul>
+    {{#each breweryList}}
+        <li>
+            <a href={{this.website}}>{{this.name}}</a>
+        </li>
+    {{/each}}
+</ul>
+
+<p>Now it's your turn to go out and do something interesting with this free database API. You could make a website for a brewery with a list of its beers and all of their information, or create a guide to breweries in your area. You could even create a search function to find a beer you like, or a brewery, or to discover new beers or breweries using the random function for those endpoints. BreweryDB also tracks beer-related events, so a calendar or discovery tool could help you on your way to finding that next great brew. As with brewing, the possibilities for applications of this information are endless!</p>
+
+<p>Oh, and now would be a good time for you to reward yourself with a cold one. Cheers!</p>

@@ -1,0 +1,37 @@
+* {
+    font-family: Arial, sans-serif;
+}
+
+.footer {
+
+    height: 80px;
+
+  padding: 1rem;
+  background-color: #efefef;
+  text-align: center;
+}
+
+pre, code { 
+    font-family: monospace;
+    font-size: 125%;
+    background-color: lightgray;
+    color: maroon;    
+}
+
+pre {
+    white-space: pre-wrap;
+}
+
+body {
+    max-width: 1080px;
+    margin: 0 auto !important;
+    float: none !important;
+    font-size: large;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #333;
+    background-image: linear-gradient(to right, #ccc, #333, #ccc);
+}

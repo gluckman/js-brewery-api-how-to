@@ -1,0 +1,69 @@
+<h1>Server Setup</h1>
+
+<h2>Install what you need</h2>
+
+<p>On your Node.js server, you'll need to use npm to install express, express-handlebars, and request. We will outline what each of these pieces of middleware do. When we get to them. The easiest way to install the necessary items is to include them in a package.json file and run <code>npm install</code>.</p>
+
+<h2>It's time for JavaScript</h2>
+
+<p>We can now begin building the web app with JavaScript. Specific implementations will vary, but below we will begin going into what will give us the final results as seen in this tutorial.</p>
+
+<p>First we have to get everything up and running.</p>
+
+<pre>var express = require('express');
+var app = express();</pre>
+
+<p>Here we require Express and then create an app as an instance of it. Express sits on top of Node.js and provides some additional functionality and the framework that we'll need for the app.</p>
+
+<hr>
+
+<pre>var handlebars = require('express-handlebars').create({defaultLayout:'main'});</pre>
+
+<p>This requires Handlebars and sets it up to use a default layout called main. This is what provides the unified look of all of the pages in this tutorial.</p>
+
+<hr>
+
+<pre>var credentials = require('./credentials.js');</pre>
+
+<p> This line links a module that contains our secret API key. It is held in a separate file so that it remains a secret. The contents of <code>credentials.js</code> look like this:</p>
+
+<pre>module.exports = {
+	bdbKey: '[API key goes here]'
+}</pre>
+
+<hr>
+
+<pre>var request = require('request');</pre>
+
+<p>Request is what allows us to make a server-side request without running into issues with the same-origin policy. It implements CORS (no, not Coors...), which is cross-origin resource sharing, and allows us to make a request from one domain (in this case oregonstate.edu) to another (brewerydb.com) without running into a security issue with the browser.</p>
+
+<hr>
+
+<pre>app.engine('handlebars', handlebars.engine);
+app.set('view engine', 'handlebars');</pre>
+
+<p>These lines set up the view engine. We will use handlebars to populate a template with the information from the API call. Handlebars supplies the templating.</p>
+
+<hr>
+
+<pre>app.set('port', 36663);</pre>
+
+<p>Here we tell the server which port to run on. This will depend on how and where your app is hosted.</p>
+
+<hr>
+
+<pre>app.use(express.static('public'));</pre>
+
+<p>This simply tells the server to look in a folder called public for any static files, like the CSS stylesheet.</p>
+
+<hr>
+
+<p>All of the code above lives at the top of our JavaScript file, preparing the server to make its API call and then populate the results onto a page. Below is a block that tells the server to listen on the port we selected and also gives some feedback that it is operational in the console. It goes at the very end of our JavaScript file.</p>
+
+<pre>app.listen(app.get('port'), function(){
+  console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
+});</pre>
+
+<hr>
+
+<p>We're now ready to <a href="/request">set up and make a request</a> to the API!</p>

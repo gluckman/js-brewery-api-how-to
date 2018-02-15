@@ -1,0 +1,33 @@
+<a href="http://www.brewerydb.com"><img src=http://s3.amazonaws.com/brewerydb/Powered-By-BreweryDB.png width="900px"></a>
+
+<h1>Introduction</h1>
+
+<p><a href="http://www.brewerydb.com">BreweryDB</a> is a database of breweries around the world, including their locations and specifics about the beers they brew. It offers an API that allows developers to access information from the database as well as submit new information. BreweryDB offers <a href="http://www.brewerydb.com/developers/docs">extensive documentation on the endpoints</a> the database offers (more on those later) but it lacks information to help beginners get started. That’s where we come in. This how-to guide will walk you through the process of setting up a simple client-facing page and a server to interact with the BreweryDB API. </p>
+
+
+<p>This guide focuses on using a server-side GET request to retrieve information from the database. From there, you can create more complex websites using GET requests as well as POST, PUT, and DELETE requests to contribute to the database. The BreweryDB documentation is very complete, and once you get the hang of one endpoint its use is easily extrapolated to the others.</p>
+
+
+<p>About those endpoints. Think of these as the different categories that can be accessed using the API. For instance, the <a href="http://www.brewerydb.com/developers/docs-endpoint/brewery_index">Brewery endpoint</a> allows you to get a list of breweries matching certain criteria or a single brewery by its database ID using a GET request; it can also send a POST request to add a new brewery, a PUT request to update one, or a DELETE request to remove one. The Search endpoint, on the other hand, only accepts a GET request, since it is only set up as a way to access information, not make modifications to the database. Again, what each endpoint can and can’t do is clearly communicated in the BreweryDB documentation, so reference that.</p>
+
+
+<p>Once you have decided what kind of information you want from the database, you can choose the appropriate endpoint and look up the parameters it accepts as well as the possible return fields. The general structure of a request is as follows: <code>http://api.brewerydb.com/v2/[endpoint]?key=[your API key]&[parameter1]=[value1]</code></p>
+
+
+<p>where <code>[endpoint]</code> is the name of the endpoint,<br>
+<code>[API key]</code> is your personal, secret API key used to access the API,<br>
+<code>[parameter1]</code> is the name of the first parameter,<br>
+and <code>[value1]</code> is the parameter’s value.</p>
+
+
+<p>We’ll use the <a href="http://www.brewerydb.com/developers/docs-endpoint/location_index">Location endpoint</a> as the example for this guide. Looking at the documentation, we see we can make a GET request for a list of breweries that match our parameters using /locations. For users without a Premium account, this requires setting one of the following parameters: locality, postalCode, or region. We want to search by city, so we’ll use locality.</p>
+
+
+<p>So to request a list of breweries in Ann Arbor, Michigan, we would send the following request:
+<code>http://api.brewerydb.com/v2/locations?key=[your API key]&locality=ann%20arbor</code></p>
+
+
+<p>If you don’t know what these mean yet, don’t worry; we’ll walk through sending a request and processing the response.</p>
+
+
+<p>The <a href="/tools">next page</a> will discuss the tools required for gaining access to the database.</p>
